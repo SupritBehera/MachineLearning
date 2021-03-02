@@ -42,8 +42,12 @@ def k_means(k):
 
   centroids = list(map(lambda index: [x[index], y[index]] ,random.sample(range(0, 99), k)))
   
-  # list containing numbers from 0 to k-1 (both inclusive) representing the cluster number
-  #clusters = list(range(0, k))
+  # clusters would store a list of k lists, with nth list containing all points in the nth cluster
+  # initially, clusters is a list containing of k empty lists
+  clusters = [[] for i in range(0,k)]
+
+  
+
 
 k_means(num_clusters)
 
@@ -56,6 +60,12 @@ k_means(num_clusters)
 # co-ordinates (x1, y1) and (x2, y2) in the x-y plane
 def eucledian_dist(x1, y1, x2, y2):
   return math.sqrt( ( (x2 - x1) ** 2) - ( (y2 - y1) ** 2) )
+
+def closest_centroid(point, centroids):
+  x = point[0]
+  y = point[1]
+  distances_from_centroids = list(map(lambda centroid : eucledian_dist(x,y,centroid[0], centroid[1]), centroids))
+  return distances_from_centroids.index(min(distances_from_centroids))
 
 
 
