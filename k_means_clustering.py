@@ -5,20 +5,39 @@ import math
 
 # Function that returns the eucledian distance between two points having 
 # co-ordinates (x1, y1) and (x2, y2) in the x-y plane
-def eucledian_dist(x1, y1, x2, y2):
-  return math.sqrt( ( (x2 - x1) ** 2) - ( (y2 - y1) ** 2) )
+def eucledian_dist(point1, point2):
+  x1 = point1[0]
+  y1 = point1[1]
+  x2 = point2[0]
+  y2 = point2[1]
+  return math.sqrt( ( (x2 - x1) ** 2) + ( (y2 - y1) ** 2) )
 
 def closest_centroid(point, centroids):
   # distances_from_centroids is a list containing the distance of point from every centroid
-  distances_from_centroids = list(map(lambda centroid : eucledian_dist(point[0],point[1],centroid[0], centroid[1]), centroids))
+  distances_from_centroids = list(map(lambda centroid : eucledian_dist(point, centroid), centroids))
   # the index of the smallest element in the distances_from_centroids list is then returned, as that would give the cluster number
   # to which point should belong, being closest to the centroid of that cluster
   return distances_from_centroids.index(min(distances_from_centroids))
 
-def assign_points_to_clusters(centroids, x, y, k):
+def assign_points_to_clusters(centroids, points, k):
   clusters = [[] for i in range(k)]
+  for point in points :
+    clusters[closest_centroid(point, centroids)].append(point)
+  return clusters
 
+def calc_centroid_of_cluster(cluster):
+  sum_x = 0
+  sum_y = 0
+  for cluster_point in cluster:
+    sum_x += cluster_point[0]
+    sum_y += cluster_point[1]
+  return [(sum_x/len(cluster)), (sum_y/len(cluster))]
 
+def recompute_centroids(clusters):
+  centroids = []
+  for cluster in clusters:
+    centroids.append(calc_centroid_of_cluster(cluster))
+  return centroids
 
 def k_means(k):
 
@@ -40,14 +59,14 @@ def k_means(k):
   clusters = [[] for i in range(0,k)]
 
   for i in range(100):
-    clusters  =  assign_points_to_clusters(centroids, x, y, k)
+    clusters  =  assign_points_to_clusters(centroids, points, k)
     centroids = recompute_centroids(clusters)
-  print(clusters)
+  print([point[0] for point in clusters[0]])
 
 
 x = [] # Store x co-ordinate of each point
 y = [] # Store y co-ordinate of each point
-
+points = [] # list containing list of x and y co-ordinates of each point
 actual_label = [] # Stores the actual label of each point
 
 with open('dataset.csv', 'r') as dataset_csv_file: # 'r' is read mode
@@ -59,8 +78,9 @@ with open('dataset.csv', 'r') as dataset_csv_file: # 'r' is read mode
         continue
       # line[0] has the serial number of the point, line[1] the x-coordinate, 
       # line[2] the y co-ordinate and line[3] its actual label
-      x.append(line[1])
-      y.append(line[2])
+      x.append(float(line[1]))
+      y.append(float(line[2]))
+      points.append([float(line[1]), float(line[2])])
       actual_label.append(line[3])
       #print(line)
 
