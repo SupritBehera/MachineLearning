@@ -51,6 +51,8 @@ def k_means(k):
   # We pass the entire thing to the list() function to convert the map object into a list
   # Ultimately, centroids would contain a list of k lists, each having the x and y co-ordinate of a random point
   # which is initially taken as a centroid 
+  #
+  # Note : it isn't necessary that the initial three centroids have to be points in the dataset
 
   centroids = list(map(lambda index: [x[index], y[index]] ,random.sample(range(0, 99), k)))
   
@@ -58,9 +60,31 @@ def k_means(k):
   # initially, clusters is a list containing of k empty lists
   clusters = [[] for i in range(0,k)]
 
+  # We then assign points to their respective clusters based on the centroid of which cluster is closest to the point
+  # and then recompute the centroid of each cluster as the centroid of all points in a cluster
+  # The more we repeat the above two steps, the more accurate the clustering is, and for this dataset, 100 is more than enough
+  # iterations to get accurate clustering based off the k-means algorithm
+
   for i in range(100):
+
+    # assign_points_to_clusters() returns a list containing k lists, each representing a cluster, 
+    # and each of these cluster lists further contains the x,y co-ordinates of all the points in that cluster.
+    # The function takes the current list of centroids, points and the value of k, computes for each point which cluster
+    # it should be assigned to depending on the distance of the point from the centroid of each cluster, and then accordingly updates 
+    # list containing the clusters and the points in each of them, and returns the list after the computation has been done for all points
+    #
+    # Furthermore, this step is run before the recomputing centroids step because initially we take any three random points as the centroids,
+    # after which we first assign the points to clusters taking these three random points to be the centroids in the first iteration
+
     clusters  =  assign_points_to_clusters(centroids, points, k)
+
+    # the centroids are then recomputed using recompute_centroids(), which takes in the list containing all the clusters
+    # and the points contained within them. The function returns the new list of centroids corresponding to each cluster.
+    # In the next iteration, this new list of centroids is then used to again assign points to their respective clusters and so on
+    
     centroids = recompute_centroids(clusters)
+
+  # print the x co-ordinate of all the points in cluster 0  
   print([point[0] for point in clusters[0]])
 
 
@@ -86,7 +110,7 @@ with open('dataset.csv', 'r') as dataset_csv_file: # 'r' is read mode
 
 # the k means clustering algorithm requires k, that is the number of clusters
 # while there are ways to gather the optimum value of k, for now we give it the
-# optimum value, which is 3
+# optimum value for the given dataset, which is 3
 num_clusters = 3
 #print(x)
 
