@@ -12,6 +12,8 @@ def eucledian_dist(point1, point2):
   y2 = point2[1]
   return math.sqrt( ( (x2 - x1) ** 2) + ( (y2 - y1) ** 2) )
 
+# Function that takes in the co-ordinates of a point, and the list of the co-ordinates of all the centroids
+# and finds which centroid is closest to the passed point
 def closest_centroid(point, centroids):
   # distances_from_centroids is a list containing the distance of point from every centroid
   distances_from_centroids = list(map(lambda centroid : eucledian_dist(point, centroid), centroids))
@@ -19,20 +21,31 @@ def closest_centroid(point, centroids):
   # to which point should belong, being closest to the centroid of that cluster
   return distances_from_centroids.index(min(distances_from_centroids))
 
+# Function that assigns all points to the appropriate cluster
+# and returns a list of k lists, each corresponding to a cluster, containing all the points
+# that belong to that cluster
 def assign_points_to_clusters(centroids, points, k):
   clusters = [[] for i in range(k)]
+  # For every point, find the closest centroid, then add the point to the corresponding list inside clusters
   for point in points :
     clusters[closest_centroid(point, centroids)].append(point)
   return clusters
 
+# Function that takes in a list of all points in a cluster and returns the co-ordinates 
+# of the centroid of that cluster
 def calc_centroid_of_cluster(cluster):
-  sum_x = 0
-  sum_y = 0
+  sum_x = 0 # to store the sum of x-coordinates of every point in the cluster
+  sum_y = 0 # to store the sum of x-coordinates of every point in the cluster
   for cluster_point in cluster:
     sum_x += cluster_point[0]
     sum_y += cluster_point[1]
+  # The formula for getting the co-ordinates of the centroid of a cluster is 
+  # (sum_x/(total num of points in cluster), (sum_y/(total number of points in cluster))
+  # len(cluster) gives you the number of points in a cluster
   return [(sum_x/len(cluster)), (sum_y/len(cluster))]
 
+# Function that recomputes the centroid for each cluster and then returns a list 
+# of k lists, each of the k lists containing all points containing in their respective clusters
 def recompute_centroids(clusters):
   centroids = []
   for cluster in clusters:
@@ -81,7 +94,7 @@ def k_means(k):
     # the centroids are then recomputed using recompute_centroids(), which takes in the list containing all the clusters
     # and the points contained within them. The function returns the new list of centroids corresponding to each cluster.
     # In the next iteration, this new list of centroids is then used to again assign points to their respective clusters and so on
-    
+
     centroids = recompute_centroids(clusters)
 
   # print the x co-ordinate of all the points in cluster 0  
