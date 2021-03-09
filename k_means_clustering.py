@@ -52,6 +52,12 @@ def recompute_centroids(clusters):
     centroids.append(calc_centroid_of_cluster(cluster))
   return centroids
 
+def output_final_clusters(clusters):
+  for index, cluster in enumerate(clusters):
+    print('Cluster ', index)
+    print(([point[0] for point in cluster]))
+    print()
+
 def k_means(k):
 
   # random.sample(range(0, 99), k) returns k random integers in the range of 0 to 99 (as a list)
@@ -67,7 +73,8 @@ def k_means(k):
   #
   # Note : it isn't necessary that the initial three centroids have to be points in the dataset
 
-  centroids = list(map(lambda index: [x[index], y[index]] ,random.sample(range(0, 99), k)))
+  centroids = list(map(lambda index: [points[index][0], points[index][0]] , random.sample(range(0, 99), k)))
+
   
   # clusters would store a list of k lists, with nth list containing all points in the nth cluster
   # initially, clusters is a list containing of k empty lists
@@ -97,23 +104,11 @@ def k_means(k):
 
     centroids = recompute_centroids(clusters)
 
-  # print the x co-ordinate of all the points in cluster 0  
-  print(sorted([point[0] for point in clusters[0]]))
+  output_final_clusters(clusters)
+  
 
-  print()
-
-  if(sorted(x_point_in_cluster_0) == sorted([point[0] for point in clusters[0]])):
-    print("Equal")
-  else:
-    print('Not equal')
-
-
-x = [] # Store x co-ordinate of each point
-y = [] # Store y co-ordinate of each point
 points = [] # list containing list of x and y co-ordinates of each point
 actual_label = [] # Stores the actual label of each point
-
-x_point_in_cluster_0 = [];
 
 with open('dataset.csv', 'r') as dataset_csv_file: # 'r' is read mode
     csv_reader = csv.reader(dataset_csv_file)
@@ -124,25 +119,14 @@ with open('dataset.csv', 'r') as dataset_csv_file: # 'r' is read mode
         continue
       # line[0] has the serial number of the point, line[1] the x-coordinate, 
       # line[2] the y co-ordinate and line[3] its actual label
-      x.append(float(line[1]))
-      y.append(float(line[2]))
       points.append([float(line[1]), float(line[2])])
-      
-      if(line[3] == '0'):
-        x_point_in_cluster_0.append(line[1])
-
-      actual_label.append(line[3])
-      #print(line)
 
 # the k means clustering algorithm requires k, that is the number of clusters
 # while there are ways to gather the optimum value of k, for now we give it the
 # optimum value for the given dataset, which is 3
 num_clusters = 3
-#print(x)
-
 k_means(num_clusters)
 
-print(sorted(x_point_in_cluster_0))
 
 
 

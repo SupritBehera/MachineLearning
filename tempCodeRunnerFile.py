@@ -1,1 +1,1 @@
-print
+centroids = list(map(lambda index: [x[index], y[index]] ,random.sample(range(0, 99), k)))
