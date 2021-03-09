@@ -1,1 +1,7 @@
-centroids = list(map(lambda index: [x[index], y[index]] ,random.sample(range(0, 99), k)))
+
+      if(line[3] == '0'):
+        cluster0.append(line[1])
+      if(line[3] == '1'):
+        cluster1.append(line[1])
+      if(line[3] == '2'):
+        cluster2.append(line[1])
