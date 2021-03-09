@@ -80,6 +80,7 @@ def k_means(k):
   # initially, clusters is a list containing of k empty lists
   clusters = [[] for i in range(0,k)]
 
+
   # We then assign points to their respective clusters based on the centroid of which cluster is closest to the point
   # and then recompute the centroid of each cluster as the centroid of all points in a cluster
   # The more we repeat the above two steps, the more accurate the clustering is, and for this dataset, 100 is more than enough
