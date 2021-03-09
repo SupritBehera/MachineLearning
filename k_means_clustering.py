@@ -10,7 +10,7 @@ def eucledian_dist(point1, point2):
   y1 = point1[1]
   x2 = point2[0]
   y2 = point2[1]
-  return math.sqrt( ( (x2 - x1) ** 2) + ( (y2 - y1) ** 2) )
+  return math.sqrt(( ( (x2 - x1) ** 2) + ( (y2 - y1) ** 2) ))
 
 # Function that takes in the co-ordinates of a point, and the list of the co-ordinates of all the centroids
 # and finds which centroid is closest to the passed point
@@ -98,13 +98,22 @@ def k_means(k):
     centroids = recompute_centroids(clusters)
 
   # print the x co-ordinate of all the points in cluster 0  
-  print([point[0] for point in clusters[0]])
+  print(sorted([point[0] for point in clusters[0]]))
+
+  print()
+
+  if(sorted(x_point_in_cluster_0) == sorted([point[0] for point in clusters[0]])):
+    print("Equal")
+  else:
+    print('Not equal')
 
 
 x = [] # Store x co-ordinate of each point
 y = [] # Store y co-ordinate of each point
 points = [] # list containing list of x and y co-ordinates of each point
 actual_label = [] # Stores the actual label of each point
+
+x_point_in_cluster_0 = [];
 
 with open('dataset.csv', 'r') as dataset_csv_file: # 'r' is read mode
     csv_reader = csv.reader(dataset_csv_file)
@@ -118,6 +127,10 @@ with open('dataset.csv', 'r') as dataset_csv_file: # 'r' is read mode
       x.append(float(line[1]))
       y.append(float(line[2]))
       points.append([float(line[1]), float(line[2])])
+      
+      if(line[3] == '0'):
+        x_point_in_cluster_0.append(line[1])
+
       actual_label.append(line[3])
       #print(line)
 
@@ -128,6 +141,9 @@ num_clusters = 3
 #print(x)
 
 k_means(num_clusters)
+
+print(sorted(x_point_in_cluster_0))
+
 
 
 
